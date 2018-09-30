@@ -48,6 +48,13 @@ Usage
     Day:            0.30 hours
     Session:        0.30 hours
 
+    $ cat work.log
+    started at 1537774200
+    stopped at 1537804800
+    started at 1538035200
+    stopped at 1538069400
+    started at 1538121600
+
 
 License
 -------
