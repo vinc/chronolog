@@ -3,9 +3,10 @@ Chronolog
 
 [![Gem](https://img.shields.io/gem/v/chronolog.svg)](https://rubygems.org/gems/chronolog)
 
+Chronolog is a CLI for logging time in plain text files.
 
-Install
--------
+Installation
+------------
 
 Get it from RubyGems:
 
@@ -21,6 +22,8 @@ Or build it from GitHub:
 
 Usage
 -----
+
+Run Chronolog in interactive mode:
 
     $ chronolog work.log
     > started last monday at 09:30
@@ -39,7 +42,11 @@ Usage
     Day:            9.50 hours
     > quit
 
+Run chronolog one command at a time:
+
     $ chronolog work.log start
+
+Another example (half an hour later):
 
     $ chronolog work.log print
     Time logged for 2018-09-28
@@ -48,12 +55,16 @@ Usage
     Day:            0.30 hours
     Session:        0.30 hours
 
+And everything is saved in plain text:
+
+    $ date +"stopped at %s # plain text <3" >> work.log
     $ cat work.log
     started at 1537774200
     stopped at 1537804800
     started at 1538035200
     stopped at 1538069400
     started at 1538121600
+    stopped at 1538123400 # plain text <3
 
 
 License
