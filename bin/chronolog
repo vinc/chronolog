@@ -2,6 +2,6 @@
 
 require "chronolog"
 
-path = ARGV.pop
+path = ARGV.shift
 cmd = ARGV.join(" ")
 Chronolog::CLI.new(path).run(cmd)

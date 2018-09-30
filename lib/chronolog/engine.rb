@@ -1,4 +1,6 @@
 require "csv"
+require "chronic"
+require "rainbow"
 
 module Chronolog
   class Engine
@@ -9,29 +11,37 @@ module Chronolog
       read_csv
     end
 
-    def start
+    def start(time: "now")
       raise "Received 'start' after 'start'" unless @started_at.nil?
-      @started_at = Time.now
+      @started_at = Chronic.parse(time)
       @csv << ["started", "at", @started_at.to_i]
     end
 
-    def stop
+    def stop(time: "now")
       raise "Received 'stop' before 'start'" if @started_at.nil?
-      @stopped_at = Time.now
+      @stopped_at = Chronic.parse(time)
       @csv << ["stopped", "at", @stopped_at.to_i]
       update_variables
       @started_at = nil
     end
 
-    def print(unit = "hours")
-      started_at = @started_at || Time.now
-      stopped_at = Time.now
+    def print(unit: "hours", time: "now")
+      stopped_at = Chronic.parse(time)
+      started_at = @started_at || stopped_at
       current = stopped_at - started_at
+      header = format("Time logged for %s", stopped_at.strftime("%F"))
+      puts Rainbow(header).yellow
       %w[year month day session].each do |period|
+        next if period == "session" && time != "now"
         duration = (current + previous(period, started_at)) / unit_length(unit)
-        puts format("This %- 10s % 7.2f %s", "#{period}:", duration, unit)
+        left = Rainbow(format("%- 10s", "#{period.capitalize}:"))
+        right = Rainbow(format("% 9.2f %s", duration, unit)).cyan
+        puts "#{left} #{right}"
       end
     end
+
+    alias started start
+    alias stopped stop
 
     protected
 

@@ -13,4 +13,6 @@ Gem::Specification.new do |s|
   s.authors  = ["Vincent Ollivier"]
   s.files    = Dir.glob("{bin,lib}/**/*.rb") + %w[LICENSE README.md]
   s.executables << "chronolog"
+  s.add_runtime_dependency("chronic",          "~> 0.10", ">= 0.10.0")
+  s.add_runtime_dependency("rainbow",          "~> 3.0",  ">= 3.0.0")
 end

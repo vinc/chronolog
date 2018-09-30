@@ -3,7 +3,7 @@ require "readline"
 module Chronolog
   class CLI
     CLI_CMDS = %w[quit help].freeze
-    LIB_CMDS = %w[print start stop].freeze
+    LIB_CMDS = %w[print start started stop stopped].freeze
     CMDS = (CLI_CMDS + LIB_CMDS).sort.freeze
 
     def initialize(path)
@@ -29,17 +29,32 @@ module Chronolog
     protected
 
     def exec(cmd)
-      args = cmd.split
       exit if cmd =~ /^q/
-      return @chronolog.send(args.shift, *args) if LIB_CMDS.include?(args[0])
-      usage
+      args = cmd.split
+      name = args.shift
+      return usage unless LIB_CMDS.include?(name)
+      @chronolog.send(name, **parse(args))
     rescue StandardError => e
       puts "Error: #{e.message}"
     end
 
+    def parse(args)
+      key = :time
+      args.each_with_object({}) do |arg, opts|
+        case arg
+        when "at", "on", "for"
+          key = :time
+        when "in"
+          key = :unit
+        else
+          opts[key] = "#{opts[key]} #{arg}".lstrip if key
+        end
+      end
+    end
+
     def usage
       unless @interactive
-        puts "Usage: chronolog [command] <file.log>"
+        puts "Usage: chronolog <file.log> [command]"
         puts
       end
       commands = (@interactive ? CMDS : LIB_CMDS).join("', '")
