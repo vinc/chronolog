@@ -35,7 +35,7 @@ module Chronolog
       return usage unless LIB_CMDS.include?(name)
       @chronolog.send(name, **parse(args))
     rescue StandardError => e
-      puts "Error: #{e.message}"
+      print_error(e.message)
     end
 
     def parse(args)
@@ -59,6 +59,11 @@ module Chronolog
       end
       commands = (@interactive ? CMDS : LIB_CMDS).join("', '")
       puts "Available commands: '#{commands}'"
+    end
+
+    def print_error(text)
+      error = Rainbow("Error:").red
+      puts "#{error} #{text}"
     end
   end
 end

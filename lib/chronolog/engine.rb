@@ -15,6 +15,7 @@ module Chronolog
       raise "Received 'start' after 'start'" unless @started_at.nil?
       @started_at = Chronic.parse(time)
       @csv << ["started", "at", @started_at.to_i]
+      print_header(format("Started session at %s", @started_at))
     end
 
     def stop(time: "now")
@@ -23,14 +24,14 @@ module Chronolog
       @csv << ["stopped", "at", @stopped_at.to_i]
       update_variables
       @started_at = nil
+      print_header(format("Stopped session at %s", @stopped_at))
     end
 
     def print(unit: "hours", time: "now")
       stopped_at = Chronic.parse(time)
       started_at = @started_at || stopped_at
       current = stopped_at - started_at
-      header = format("Time logged for %s", stopped_at.strftime("%F"))
-      puts Rainbow(header).yellow
+      print_header(format("Time logged for %s", stopped_at.strftime("%F")))
       %w[year month day session].each do |period|
         next if period == "session" && time != "now"
         duration = (current + previous(period, started_at)) / unit_length(unit)
@@ -44,6 +45,10 @@ module Chronolog
     alias stopped stop
 
     protected
+
+    def print_header(text)
+      puts Rainbow(text).yellow
+    end
 
     def setup_variables
       @years = Hash.new(0)

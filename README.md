@@ -27,9 +27,13 @@ Run Chronolog in interactive mode:
 
     $ chronolog work.log
     > started last monday at 09:30
+    Started session at 2018-09-24 09:30:00 +0200
     > stopped last monday at 18:00
+    Stopped session at 2018-09-24 18:00:00 +0200
     > started yesterday at 10:00
+    Started session at 2018-09-29 10:00:00 +0200
     > stopped yesterday at 19:30
+    Stopped session at 2018-09-29 19:30:00 +0200
     > print last monday
     Time logged for 2018-09-24
     Year:          18.00 hours
@@ -42,11 +46,10 @@ Run Chronolog in interactive mode:
     Day:            9.50 hours
     > quit
 
-Run chronolog one command at a time:
+Or run chronolog one command at a time:
 
-    $ chronolog work.log start
-
-Another example (half an hour later):
+    $ chronolog work.log started 30 minutes ago
+    Started session at 2018-09-28 10:00:00 +0200
 
     $ chronolog work.log print
     Time logged for 2018-09-28
@@ -55,16 +58,21 @@ Another example (half an hour later):
     Day:            0.30 hours
     Session:        0.30 hours
 
-And everything is saved in plain text:
+    $ chronolog work.log stop
+    Stopped session at 2018-09-28 10:30:00 +0200
 
-    $ date +"stopped at %s # plain text <3" >> work.log
+Everything is saved in plain text so you can also edit the file directly:
+
+    $ date +'started at %s # plain text <3' >> work.log
+
     $ cat work.log
     started at 1537774200
     stopped at 1537804800
     started at 1538035200
     stopped at 1538069400
     started at 1538121600
-    stopped at 1538123400 # plain text <3
+    stopped at 1538123400
+    started at 1538123410 # plain text <3
 
 
 License
